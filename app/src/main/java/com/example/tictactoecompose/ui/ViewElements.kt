@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tictactoecompose.R
@@ -31,7 +32,7 @@ import com.example.tictactoecompose.engin.fieldOnClick
 import com.example.tictactoecompose.engin.screenHeight
 import com.example.tictactoecompose.engin.screenWidth
 import com.example.tictactoecompose.model.TicTacToeViewModel
-import kotlin.reflect.KProperty
+import com.example.tictactoecompose.ui.theme.TicTacToeComposeTheme
 
 
 @Composable
@@ -58,14 +59,14 @@ fun Status() {
 }
 
 @Composable
-fun Field(modifier: Modifier, row: Int, col:Int){
+fun Field(modifier: Modifier = Modifier, row: Int, col: Int) {
     var bColor by remember {
         mutableStateOf(Color.White)
     }
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier
-            .clickable { bColor = fieldOnClick(bColor, row, col)}
+            .clickable { bColor = fieldOnClick(row, col) }
             .background(
                 if (TicTacToeViewModel.isPlaying) bColor else {
                     bColor = TicTacToeViewModel.startColor
@@ -73,8 +74,9 @@ fun Field(modifier: Modifier, row: Int, col:Int){
                 }
             ),
 
-    ){
-        Text(text = if(bColor == Color.White) "" else TicTacToeViewModel.allFields[row][col],
+        ) {
+        Text(
+            text = if (bColor == Color.White) "" else TicTacToeViewModel.allFields[row][col],
             fontSize = 36.sp,
             textAlign = TextAlign.Center
 
@@ -85,32 +87,43 @@ fun Field(modifier: Modifier, row: Int, col:Int){
 
 
 @Composable
-fun GameField(rows: Int, cols: Int){
+fun GameField(rows: Int, cols: Int) {
     val size = if (screenWidth < screenHeight) screenWidth else screenHeight
-    Column(modifier = Modifier
-        .width(size.dp)
-        .height(size.dp)
-        .fillMaxSize()
-        .padding(8.dp)
-        .border(1.dp, Color.Black),
+    Column(
+        modifier = Modifier
+            .width(size.dp)
+            .height(size.dp)
+            .fillMaxSize()
+            .padding(8.dp)
+            .border(1.dp, Color.Black),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        repeat(rows){row ->
-            Row(modifier = Modifier
-                .fillMaxWidth(1f)
-                .weight(1f)
+        repeat(rows) { row ->
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(1f)
+                    .weight(1f)
             ) {
-                repeat(cols){col ->
+                repeat(cols) { col ->
                     Field(
                         Modifier
                             .fillMaxSize()
                             .weight(1f)
                             .border(1.dp, Color.Black),
-                        row,col
+                        row, col
                     )
                 }
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun GamePreview() {
+    TicTacToeComposeTheme {
+        Field(row = 3, col = 3)
+
     }
 }

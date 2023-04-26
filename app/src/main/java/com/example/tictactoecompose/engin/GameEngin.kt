@@ -7,8 +7,8 @@ import com.example.tictactoecompose.model.TicTacToeViewModel.allFields
 var screenWidth: Float = 0f
 var screenHeight: Float = 0f
 
-fun fieldOnClick(bColor: Color, row: Int, col: Int): Color {
-    var retColor = bColor
+fun fieldOnClick(row: Int, col: Int): Color {
+    val retColor: Color
     if (!TicTacToeViewModel.isPlaying) TicTacToeViewModel.isPlaying = !TicTacToeViewModel.isPlaying
     if (TicTacToeViewModel.currentUser == "X") {
         retColor = Color.Red
@@ -19,13 +19,13 @@ fun fieldOnClick(bColor: Color, row: Int, col: Int): Color {
         TicTacToeViewModel.currentUser = "X"
         TicTacToeViewModel.currentUserText = "O"
     }
-    TicTacToeViewModel.allFields[row][col] = TicTacToeViewModel.currentUserText
+    allFields[row][col] = TicTacToeViewModel.currentUserText
     if (checkWin()) {
         TicTacToeViewModel.isWon = true
         TicTacToeViewModel.currentUser = TicTacToeViewModel.currentUserText
     } else {
         var hasFreeField = false
-        TicTacToeViewModel.allFields.forEach { array ->
+        allFields.forEach { array ->
             array.forEach { string ->
                 if (string == "")
                     hasFreeField = true
